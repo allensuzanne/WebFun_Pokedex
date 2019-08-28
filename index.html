@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>What's the Pokemon</title>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+</head>
+    <script>
+        $(document).ready(function(){
+            for(var i=1; i<151; i++){
+                var html_str = '<img id="' +i+ '" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + i + '.png">';
+                $("#pokes").append(html_str);
+                // console.log(html_str);   
+            }
+            $('img').click(function(){
+                $('#pokedex').empty();
+                var id=($(this).attr('id'));
+                var source= 'http://pokeapi.co/api/v2/pokemon/' +id;
+                $.get(source, function(data){
+                    var name= '<h2>'+data.forms[0].name+'</h2>';
+                    var image = '<img src="' +data.sprites.front_default+'">';
+                    var types = "<h4>Types</h4><ul>"; 
+                    for(var i = 0; i < data.types.length; i++) {
+                        types += "<li>" + data.types[i].type.name + "</li>";
+                    }
+                    types += "</ul>";
+                    var height = '<h4>Height</h4><p>'+data.height+'</p>';
+                    var weight = '<h4>Weight</h4><p>'+data.weight+'</p>';
+                    $('#pokedex').append(name, image, types, height, weight)
+                }, 'json');
+            })
+        })
+    </script>
+<body>
+    <h1>Pokemon</h1>
+    <div id='container'>
+        <p id='pokes'></p>
+    </div>
+    <div id='pokedex'>
+    </div>
+
+    <style>
+    h1{
+        display: block;
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        margin-left: 25px;
+        font-size: 40px;
+    }
+  #container{
+      vertical-align: top;
+      display: inline-block;
+      width: 950px;
+  }
+    #pokedex{
+        border: red 20px solid;
+        display: inline-block;
+        width: 200px;
+        height: 500px;
+        padding: 10px;
+    }
+    img{
+        display: inline-block;
+        width: 150px;}
+        </style>
+</html>
